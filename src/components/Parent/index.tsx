@@ -1,13 +1,36 @@
-import { useCallback, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { Wrapper } from "./styles";
 
-const Child = () => {
-  const [childrenCount, setChildrenCount] = useState<number>(0);
+interface ChildProps {
+  id: number;
+  onDelete: (id: number) => void;
+  onAddNewChild: () => void;
+}
 
-  const onAddNewChild = useCallback(
-    () => setChildrenCount((prevValue) => prevValue + 1),
-    []
-  );
+const Child: React.FC<ChildProps> = ({ id, onDelete }) => {
+  const [children, setChildren] = useState<number[]>([]);
+  const [name, setName] = useState<string>('');
+  const [isSaved, setIsSaved] = useState<boolean>(false);
+  const [editing, setEditing] = useState<boolean>(true);
+
+  const onAddNewChildLocal = useCallback(() => {
+    setChildren((prevChildren) => [...prevChildren, prevChildren.length + 1]);
+  }, []);
+
+  const onDeleteChildLocal = useCallback((childId: number) => {
+    setChildren((prevChildren) => prevChildren.filter((cId) => cId !== childId));
+  }, []);
+
+  const onSaveName = () => {
+    setIsSaved(true)
+    setEditing(false)
+  }
+
+  const onEditName = () => {
+    setName('')
+    setIsSaved(false)
+    setEditing(true)
+  }
 
   return (
     <div style={{ margin: `0 10px` }}>
@@ -27,45 +50,50 @@ const Child = () => {
           margin: "0 auto",
         }}
       >
-        <button onClick={onAddNewChild}>Add Child</button>
-      </div>
-
-      {childrenCount > 1 && (
-        <div
-          style={{
-            height: "30px",
-            width: "2px",
-            backgroundColor: "black",
-            margin: "0 auto",
-          }}
-        />
-      )}
-
-      {childrenCount > 0 ? (
-        childrenCount > 1 ? (
+        {isSaved ? (
           <>
-            {/* child wrapper */}
-            <Wrapper>
-              {Array.from({ length: childrenCount }).map(() => (
-                <Child />
-              ))}
-            </Wrapper>
+          <span>{name}</span>
+          <button onClick={onEditName}>Edit Name</button>
           </>
         ) : (
-          <Child />
-        )
-      ) : null}
+          <div>
+            <input type="text" value={name} onChange={(e) => setName(e.target.value)} 
+            disabled={!editing}/>
+            <button onClick={onSaveName} disabled={!name.trim()}>Save</button>
+          </div>
+        )}
+        { isSaved && <button onClick={onAddNewChildLocal}>Add Child</button>}
+        <button onClick={() => onDelete(id)}>Delete</button>
+
+
+      </div>
+
+      {children.length > 0 && (
+        <Wrapper>
+          {children.map((childId) => (
+            <Child
+              key={childId}
+              id={childId}
+              onDelete={onDeleteChildLocal}
+              onAddNewChild={onAddNewChildLocal}
+            />
+          ))}
+        </Wrapper>
+      )}
     </div>
   );
 };
 
-export const Parent = () => {
-  const [childrenCount, setChildrenCount] = useState<number>(0);
+export const Parent: React.FC = () => {
+  const [children, setChildren] = useState<number[]>([]);
 
-  const onAddNewChild = useCallback(
-    () => setChildrenCount((prevValue) => prevValue + 1),
-    []
-  );
+  const onAddNewChild = useCallback(() => {
+    setChildren((prevChildren) => [...prevChildren, prevChildren.length + 1]);
+  }, []);
+
+  const onDeleteChild = useCallback((childId: number) => {
+    setChildren((prevChildren) => prevChildren.filter((cId) => cId !== childId));
+  }, []);
 
   return (
     <div
@@ -81,31 +109,18 @@ export const Parent = () => {
         <button onClick={onAddNewChild}>Add Child</button>
       </div>
 
-      {childrenCount > 1 && (
-        <div
-          style={{
-            height: "30px",
-            width: "2px",
-            backgroundColor: "black",
-            margin: "0 auto",
-          }}
-        />
+      {children.length > 0 && (
+        <Wrapper>
+          {children.map((childId) => (
+            <Child
+              key={childId}
+              id={childId}
+              onDelete={onDeleteChild}
+              onAddNewChild={onAddNewChild}
+            />
+          ))}
+        </Wrapper>
       )}
-
-      {childrenCount > 0 ? (
-        childrenCount > 1 ? (
-          <>
-            {/* child wrapper */}
-            <Wrapper>
-              {Array.from({ length: childrenCount }).map(() => (
-                <Child />
-              ))}
-            </Wrapper>
-          </>
-        ) : (
-          <Child />
-        )
-      ) : null}
     </div>
   );
 };

@@ -7,7 +7,7 @@ import { Parent } from "./components/Parent";
 // Interface for Individual component props
 
 const App: React.FC = () => (
-  <div>
+  <div >
     {/* <FamilyTree /> */}
     {/* <NewTest /> */}
     {/* <Tree/> */}

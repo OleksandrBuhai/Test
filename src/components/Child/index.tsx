@@ -2,15 +2,17 @@ import React, { useCallback, useState } from "react";
 import { Wrapper } from "../Parent/styles";
 
 export const Child: React.FC = () => {
-  const [childrenCount, setChildrenCount] = useState<number>(0);
+  const [children, setChildren] = useState<{ id: number }[]>([]);
 
-  const onAddNewChild = useCallback(
-    () => setChildrenCount((prevValue) => prevValue + 1),
-    []
-  );
-
+  const onAddNewChild = useCallback(() => {
+    setChildren((prevChildren: { id: number }[]) => [
+      ...prevChildren,
+      { id: prevChildren.length + 1 },
+    ]);
+    console.log('huy')
+  }, []);
   return (
-    <div style={{ margin: `0 10px` }}>
+    <div style={{ margin: `0 10px`, }}>
       <div
         style={{
           height: "30px",
@@ -30,7 +32,7 @@ export const Child: React.FC = () => {
         <button onClick={onAddNewChild}>Add Child</button>
       </div>
 
-      {childrenCount > 1 && (
+      {children.length > 1 && (
         <div
           style={{
             height: "30px",
@@ -41,12 +43,12 @@ export const Child: React.FC = () => {
         />
       )}
 
-      {childrenCount > 0 ? (
-        childrenCount > 1 ? (
+      {children.length > 0 ? (
+        children.length> 1 ? (
           <>
             {/* child wrapper */}
             <Wrapper>
-              {Array.from({ length: childrenCount }).map(() => (
+              {Array.from({ length: children.length }).map(() => (
                 <Child />
               ))}
             </Wrapper>

@@ -61,13 +61,7 @@ const DynamicDiv: React.FC<DynamicDivProps> = ({}) => {
           alignItems: "center",
         }}
       >
-        <input
-          type="text"
-          placeholder="Enter name"
-          value={newChildName}
-          onChange={(e) => setNewChildName(e.target.value)}
-          style={{ marginRight: "10px" }}
-        />
+       
         <button onClick={handleAddChild}>Add Child</button>
       </div>
       <div

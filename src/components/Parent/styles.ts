@@ -6,6 +6,10 @@ export const Wrapper = styled.div`
   flex-wrap: wrap;
   position: relative;
 
+  & > div:hover {
+    background-color: lightgray; 
+  }
+
   &::before {
     content: " ";
     position: absolute;
