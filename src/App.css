@@ -1,0 +1,16 @@
+.container {    
+    position: relative;
+  
+  }
+
+
+
+  
+  .inner-box {
+    background-color: lightblue;
+    cursor: grab;
+  }
+  
+  .controls {
+    margin-top: 10px;
+  }

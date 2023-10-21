@@ -3,7 +3,8 @@ import styled from "styled-components";
 export const Wrapper = styled.div`
   border-top: 2px solid black;
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  overflowX: auto
   position: relative;
 
   & > div:hover {

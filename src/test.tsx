@@ -124,7 +124,7 @@ const Individual: React.FC<IndividualProps> = ({
         // left: `${left}px`,
       }}
       // draggable
-      // onMouseDown={startDragging}
+      // ==onMouseDown={startDragging}
     >
       <p>{name}</p>
       {childComponents.length > 0 && (

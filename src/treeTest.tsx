@@ -1,69 +1,49 @@
-import React, { useState } from 'react';
+// App.js
+import React, { useState } from "react";
+import "./App.css";
 
-interface TreeNodeProps {
-  node: TreeNodeData;
-  onClick: (node: TreeNodeData) => void;
-}
+const ResizableBox = () => {
+  const [scale, setScale] = useState(1);
+  const [position, setPosition] = useState({ x: 0, y: 0 });
 
-interface TreeNodeData {
-  text: string;
-  children?: TreeNodeData[];
-}
+  const onScaleChange = (e) => {
+    setScale(parseFloat(e.target.value));
+  };
 
-const getRandomNumber = () => Math.floor(Math.random() * 100);
-
-const TreeNode: React.FC<TreeNodeProps> = ({ node, onClick }) => (
-  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }} onClick={() => onClick(node)}>
-    <div>{node.text}</div>
-    {node.children && (
-      <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
-        {node.children.map((child, index) => (
-          <TreeNode key={index} node={child} onClick={() => {}} />
-        ))}
-      </div>
-    )}
-  </div>
-);
-
-const Tree: React.FC = () => {
-  const [treeData, setTreeData] = useState<TreeNodeData>({
-    text: 'Дерево',
-  });
-
-  const handleNodeClick = (currentNode: TreeNodeData) => {
-    setTreeData((prevTreeData) => {
-      const generateNewNode = (index: number): TreeNodeData => {
-        const randomNumber = getRandomNumber();
-        return {
-          text: `${currentNode.text}.${index + 1}.${randomNumber}`,
-          children: [
-            { text: `${currentNode.text}.${index + 1}.${randomNumber}.1` },
-            { text: `${currentNode.text}.${index + 1}.${randomNumber}.2` },
-          ],
-        };
-      };
-
-      const traverseAndGenerateChildren = (node: TreeNodeData) => {
-        if (node.children) {
-          return {
-            ...node,
-            children: node.children.map((child, index) => generateNewNode(index)),
-          };
-        }
-        return node;
-      };
-
-      const updatedTreeData = traverseAndGenerateChildren(prevTreeData);
-      return { ...updatedTreeData };
+  const onDrag = (e) => {
+    setPosition({
+      x: e.clientX,
+      y: e.clientY,
     });
   };
 
   return (
-    <div>
-      <h1>Дерево структури даних</h1>
-      <TreeNode node={treeData} onClick={handleNodeClick} />
+    <div className="container">
+      <div
+        className="inner-box"
+        style={{
+          width: `${200 * scale}px`,
+          height: `${200 * scale}px`,
+          transform: `translate(${position.x}px, ${position.y}px)`,
+        }}
+        draggable="true"
+        onDrag={onDrag}
+      />
+      <div className="controls">
+        <label>
+          Scale:
+          <input
+            type="range"
+            min="0.1"
+            max="2"
+            step="0.1"
+            value={scale}
+            onChange={onScaleChange}
+          />
+        </label>
+      </div>
     </div>
   );
 };
 
-export default Tree;
+export default ResizableBox;
