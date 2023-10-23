@@ -10,7 +10,7 @@ export const Wrapper = styled.div`
   & > div:hover {
     background-color: lightgray; 
   }
-
+  
   &::before {
     content: " ";
     position: absolute;

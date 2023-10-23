@@ -190,7 +190,7 @@ const Parent: React.ForwardRefRenderFunction<ParentRef> = (props, ref) => {
         left: 0,
         pos3: 0,
         pos4: 0,
-      }); // Зберегти початкову позицію
+      }); 
       setPosition({
         ...position,
         pos3: e.clientX,
